@@ -1,5 +1,9 @@
 import { useState } from "react";
+import * as pdfjsLib from "pdfjs-dist/build/pdf.mjs";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import TextField from "./TextField.jsx";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const initialTemplateForm = {
   title: "",
@@ -10,14 +14,120 @@ const initialTemplateForm = {
   extraInstructions: "",
 };
 
+const cleanMarker = (marker) =>
+  marker
+    .trim()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+
+const toOutputLabel = (marker) =>
+  cleanMarker(marker)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
+
+const extractTemplateMarkers = (text) => {
+  const markers = new Map();
+  const variants = [
+    text,
+    text.replace(/\s+/g, ""),
+    text.replace(/\s+/g, " "),
+  ];
+
+  variants.forEach((variant) => {
+    const matches = variant.matchAll(/\{\{\s*([^{}]+?)\s*\}\}/g);
+    Array.from(matches).forEach((match) => {
+      const marker = cleanMarker(match[1]);
+      if (marker) {
+        markers.set(marker.toLowerCase(), marker);
+      }
+    });
+  });
+
+  return Array.from(markers.values());
+};
+
+const buildOutputTemplateFromMarkers = (markers) =>
+  markers.map((marker) => `${toOutputLabel(marker)}:`).join("\n");
+
+const getFileNameWithoutExtension = (fileName) =>
+  fileName.replace(/\.[^/.]+$/, "").replace(/[_-]+/g, " ");
+
 export default function CustomTemplatePanel({ onCreateTemplate }) {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState(initialTemplateForm);
   const [feedback, setFeedback] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
 
   const updateField = (name, value) => {
     setFormData((current) => ({ ...current, [name]: value }));
     setFeedback("");
+  };
+
+  const handlePdfImport = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    setFeedback("Leyendo PDF de Canva...");
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({
+        data: new Uint8Array(arrayBuffer),
+      }).promise;
+      const pageTexts = [];
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item) => item.str || "")
+          .join("");
+        const pageTextWithSpaces = textContent.items
+          .map((item) => item.str || "")
+          .join(" ");
+        pageTexts.push(pageText, pageTextWithSpaces);
+      }
+
+      const markers = extractTemplateMarkers(pageTexts.join("\n"));
+
+      if (markers.length === 0) {
+        setFeedback(
+          "No encontré campos tipo {{NOMBRE}}. En Canva, agrega marcadores con doble llave y vuelve a exportar el PDF.",
+        );
+        return;
+      }
+
+      setFormData((current) => ({
+        ...current,
+        title: current.title || getFileNameWithoutExtension(file.name),
+        description:
+          current.description ||
+          "Plantilla importada desde un PDF diseñado en Canva.",
+        materialName:
+          current.materialName ||
+          `Contenido para completar la plantilla ${getFileNameWithoutExtension(
+            file.name,
+          )}`,
+        fieldsText: markers.join("\n"),
+        outputTemplate: buildOutputTemplateFromMarkers(markers),
+        extraInstructions:
+          current.extraInstructions ||
+          "Genera textos breves y listos para copiar en los espacios de la plantilla visual.",
+      }));
+      setIsOpen(true);
+      setFeedback(
+        `Detecté ${markers.length} campo(s): ${markers.join(", ")}. Revisa la estructura y guarda la plantilla.`,
+      );
+    } catch {
+      setFeedback(
+        "No pude leer el PDF. Prueba exportarlo desde Canva como PDF estándar o crea la plantilla manualmente.",
+      );
+    } finally {
+      setIsImporting(false);
+      event.target.value = "";
+    }
   };
 
   const handleSubmit = (event) => {
