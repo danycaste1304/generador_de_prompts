@@ -210,6 +210,7 @@ DISPONIBILIDAD:
 
 PRESENTACIÓN PERSONAL
 NOMBRE:
+MI OBJETIVO:
 ¿QUÉ SÉ HACER?:
 ¿QUÉ ME INTERESA?:
 ¿QUIÉN SOY?:
@@ -217,12 +218,16 @@ NOMBRE:
 MI PRESENTACIÓN FINAL:
 
 DESCRIPCIÓN PROFESIONAL
-MI NOMBRE:
-CAMPO LABORAL / MIS ÁREAS DE INTERÉS:
-MIS HABILIDADES DESTACADAS:
+NOMBRE:
+ÁREAS DE INTERÉS:
+HABILIDADES PRINCIPALES:
+1.
+2.
+3.
+FORTALEZAS:
 MI EXPERIENCIA O APRENDIZAJES:
-MIS FORTALEZAS PERSONALES:
-CONDICIONES QUE ME AYUDAN, SI APLICA:
+OBJETIVO PERSONAL O LABORAL:
+APOYOS QUE ME AYUDAN, SI APLICA:
 MI DESCRIPCIÓN PROFESIONAL FINAL:
 Soy una persona [texto breve].
 Me interesa desarrollarme en [áreas de interés].
@@ -230,7 +235,7 @@ Me destaco por [habilidades o fortalezas].
 He aprendido o tengo experiencia en [experiencia o aprendizajes].
 Para desempeñarme mejor, me ayuda [condiciones de trabajo, si aplica].`,
     contextInstruction:
-      "Esta ruta debe generar contenido listo para completar dos plantillas visuales: presentación personal y descripción profesional. Adapta todos los textos al lugar donde se usarán. Si el lugar indicado es un taller, prioriza frases naturales para leer en voz alta o compartir con el grupo. No enfoques la respuesta como CV, empresa, entrevista o redes sociales salvo que el usuario lo haya indicado. En la plantilla de presentación personal, cada bloque debe ser breve porque va en una tarjeta pequeña: 'Qué sé hacer' máximo 18 palabras, 'Qué me interesa' máximo 18 palabras, 'Quién soy' máximo 22 palabras, 'Qué puedo aportar' máximo 22 palabras. 'Mi presentación final' debe ser un guion oral de 45 a 65 palabras, claro, cercano y fácil de leer. En la plantilla de descripción profesional, usa frases cortas que puedan rellenar una página limpia: campo laboral máximo 8 palabras o una lista breve; habilidades destacadas máximo 5 elementos separados por comas; experiencia o aprendizajes máximo 18 palabras; fortalezas personales máximo 5 elementos separados por comas; condiciones que me ayudan máximo 14 palabras y solo si aplica. La descripción profesional final debe mantener exactamente las cinco frases dadas y reemplazar los textos entre corchetes con contenido breve. Si falta información, usa 'por completar'. Evita frases demasiado genéricas como 'qué gran paso' y escribe directamente el contenido de las plantillas.",
+      "Esta ruta debe generar contenido listo para completar dos plantillas visuales: presentación personal y descripción profesional. Adapta todos los textos al lugar donde se usarán. Si el lugar indicado es un taller, prioriza frases naturales para leer en voz alta o compartir con el grupo. No enfoques la respuesta como CV, empresa, entrevista o redes sociales salvo que el usuario lo haya indicado. En la plantilla de presentación personal, cada bloque debe ser breve porque va en una tarjeta pequeña: 'Mi objetivo' máximo 14 palabras, 'Qué sé hacer' máximo 18 palabras, 'Qué me interesa' máximo 18 palabras, 'Quién soy' máximo 22 palabras, 'Qué puedo aportar' máximo 22 palabras. 'Mi presentación final' debe ser un guion oral de 45 a 65 palabras, claro, cercano y fácil de leer. En la plantilla de descripción profesional, usa frases cortas que puedan rellenar una página limpia: áreas de interés máximo 6 opciones breves; habilidades principales exactamente 3 elementos cortos; fortalezas máximo 4 elementos separados por comas; experiencia o aprendizajes máximo 18 palabras; objetivo personal o laboral máximo 18 palabras; apoyos que me ayudan máximo 14 palabras y solo si aplica. Si no hay apoyos o condiciones indicadas, escribe 'No aplica' en ese campo. La descripción profesional final debe mantener exactamente las cinco frases dadas y reemplazar los textos entre corchetes con contenido breve. Si falta información, usa 'por completar'. Evita frases demasiado genéricas como 'qué gran paso' y escribe directamente el contenido de las plantillas.",
   },
   emprendimiento: {
     id: "emprendimiento",
@@ -373,7 +378,7 @@ PÚBLICO OBJETIVO:
 DIAPOSITIVA 6 - CÓMO PUEDO COMUNICARLO
 PRIMER PASO:
 CANALES:
-RECURSOS O ASPECTOS POR ORGANIZAR:
+APOYOS NECESARIOS:
 
 DIAPOSITIVA 7 - PRESENTACIÓN BREVE DEL EMPRENDIMIENTO
 TEXTO FINAL PARA EXPLICAR LA IDEA EN MENOS DE UN MINUTO:
@@ -384,7 +389,7 @@ CONTACTO:
 EMAIL:
 REDES:`,
     contextInstruction:
-      "Esta ruta debe generar contenido listo para completar una presentación horizontal de 8 diapositivas sobre un emprendimiento. Debe sonar como una propuesta de negocio real, profesional y cercana. No la redactes como si la persona necesitara simplificación por discapacidad o dificultad personal. El lenguaje claro debe servir para comunicar mejor el emprendimiento, no para reducir el nivel del mensaje. No menciones discapacidad, exclusión social, acompañamiento de CADIR ni apoyos personales dentro de los textos comerciales salvo que el usuario lo pida expresamente. Usa 'recursos o aspectos por organizar' en lugar de 'apoyos necesarios'. Mantén cada diapositiva breve: portada con nombre y frase principal de máximo 12 palabras; descripción del producto o servicio máximo 35 palabras; objetivo máximo 18 palabras; necesidad máximo 28 palabras; producto/servicio, valor principal y forma de comunicarlo máximo 18 palabras cada uno; público objetivo máximo 22 palabras; primer paso, canales y recursos por organizar máximo 18 palabras cada uno. El texto final para explicar la idea debe durar menos de un minuto: 70 a 95 palabras, tono natural y fácil de decir en voz alta. La frase de cierre debe ser breve y amable. Si falta contacto, email o redes, escribe 'por completar'. Si hay contradicciones entre intereses personales y el negocio, señálalas solo si no hay plantilla obligatoria; si hay plantilla obligatoria, usa los datos disponibles y coloca 'por completar' donde falte información. Evita saludos excesivos o frases paternalistas; empieza directamente con el contenido de la presentación.",
+      "Esta ruta debe generar contenido listo para completar una presentación horizontal de 8 diapositivas sobre un emprendimiento. Debe sonar como una propuesta de negocio real, profesional y cercana. No la redactes como si la persona necesitara simplificación por discapacidad o dificultad personal. El lenguaje claro debe servir para comunicar mejor el emprendimiento, no para reducir el nivel del mensaje. No menciones discapacidad, exclusión social, acompañamiento de CADIR ni apoyos personales dentro de los textos comerciales salvo que el usuario lo pida expresamente. En el campo 'Apoyos necesarios', escribe recursos, acciones o aspectos prácticos necesarios para poner en marcha el negocio, por ejemplo materiales, reservas, cobros, transporte, fotos, redes sociales o gestión de mensajes; no lo redactes como apoyos por discapacidad. Mantén cada diapositiva breve: portada con nombre y frase principal de máximo 12 palabras; descripción del producto o servicio máximo 35 palabras; objetivo máximo 18 palabras; necesidad máximo 28 palabras; producto/servicio, valor principal y forma de comunicarlo máximo 18 palabras cada uno; público objetivo máximo 22 palabras; primer paso, canales y apoyos necesarios máximo 18 palabras cada uno. El texto final para explicar la idea debe durar menos de un minuto: 70 a 95 palabras, tono natural y fácil de decir en voz alta. La frase de cierre debe ser breve y amable. Si falta contacto, email o redes, escribe 'por completar'. Si hay contradicciones entre intereses personales y el negocio, señálalas solo si no hay plantilla obligatoria; si hay plantilla obligatoria, usa los datos disponibles y coloca 'por completar' donde falte información. Evita saludos excesivos o frases paternalistas; empieza directamente con el contenido de la presentación.",
   },
 };
 

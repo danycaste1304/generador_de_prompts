@@ -111,10 +111,10 @@ Instrucciones de seguridad y estilo:
 - Incluye, cuando sea natural, los datos o ideas marcados como "sí deben aparecer".
 - Ajusta extensión, formato y nivel de detalle a las preferencias indicadas.
 - Adapta el texto al objetivo indicado y al contexto real de uso.
-- Antes de escribir, detecta si hay contradicciones o datos poco claros. No las resuelvas inventando; señálalas al final como pendientes.
-- Si falta información importante, dilo brevemente y propone cómo completarla.
-- Si aún falta información para algún material, incluye al final una sección llamada "Datos pendientes por completar" y ordénala por material o sección.
-- Organiza la respuesta con títulos y secciones fáciles de revisar.
+- Antes de escribir, detecta si hay contradicciones o datos poco claros. No las resuelvas inventando.
+- Si hay una plantilla de salida obligatoria, no agregues sección de pendientes: usa "por completar" dentro del campo correspondiente.
+- Si no hay plantilla de salida obligatoria y falta información importante, incluye al final una sección breve llamada "Datos pendientes por completar".
+- Organiza la respuesta con títulos y secciones fáciles de revisar solo si no contradice la plantilla obligatoria.
 
 Nota importante:
 El resultado generado por IA debe ser revisado con apoyo de CADIR antes de utilizarse.`;

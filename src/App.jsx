@@ -4,6 +4,7 @@ import TextField from "./components/TextField.jsx";
 import PromptOutput from "./components/PromptOutput.jsx";
 import SectionPanel from "./components/SectionPanel.jsx";
 import FlowSteps from "./components/FlowSteps.jsx";
+import BridgeIcon from "./components/BridgeIcon.jsx";
 import { routes } from "./data/routes.js";
 import { buildPrompt, getAllRouteFields } from "./utils/promptBuilder.js";
 import { buildPrefillFromUrl } from "./utils/prefill.js";
@@ -125,6 +126,151 @@ const createRouteData = () =>
     return accumulator;
   }, {});
 
+const demoDataByRoute = {
+  empleo: {
+    baseData: {
+      name: "Lucía Martínez",
+      age: "29",
+      formDate: "15/07/2026",
+      supportProfessional: "Orientadora laboral de CADIR",
+      skills:
+        "Responsable, puntual, ordenada, trato amable, aprende con práctica",
+      interests:
+        "Limpieza de oficinas, atención al cliente, cocina y espacios organizados",
+      experience:
+        "Voluntariado en una asociación local apoyando en orden, limpieza y atención básica a personas usuarias",
+      supports:
+        "Instrucciones claras, horarios organizados y acompañamiento inicial",
+      currentGoal: "Preparar un CV básico para buscar su primer empleo",
+      finalAudience: "Empresas locales y equipo de orientación laboral",
+      finalUse: "Plantilla de CV básico",
+      desiredTone: "Profesional, claro y positivo",
+      desiredLength: "Breve, para una plantilla de una página",
+      mustInclude: "Disponibilidad por las mañanas y trato amable",
+      mustAvoid: "No mencionar diagnósticos ni información personal sensible",
+      internalContext:
+        "Necesita ganar confianza para presentar sus capacidades de forma sencilla",
+    },
+    routeData: {
+      jobType: "Auxiliar de limpieza de oficinas",
+      workArea: "Limpieza, mantenimiento de espacios y apoyo en cocina",
+      availability: "Mañanas, jornada parcial",
+      training: "Taller básico de manipulación de alimentos",
+      phone: "600 123 456",
+      email: "lucia.demo@email.com",
+      city: "Valencia",
+      experiencePlace: "Asociación comunitaria del barrio",
+      experienceDates: "Marzo a junio de 2025",
+      experienceTasks:
+        "Ordenar materiales, mantener espacios limpios y apoyar en la atención de personas",
+      educationLevel: "ESO finalizada",
+      cvNotes: "Interés por trabajos con tareas claras y ambiente organizado",
+    },
+  },
+  presentacion: {
+    baseData: {
+      name: "Daniela Pérez",
+      age: "24",
+      formDate: "15/07/2026",
+      supportProfessional: "Profesional de acompañamiento de CADIR",
+      skills:
+        "Creativa, amable, responsable, buena disposición para aprender, trabajo en equipo",
+      interests:
+        "Cocina, creación de contenido, atención al cliente y actividades grupales",
+      experience:
+        "Participó en talleres comunitarios y apoyó en actividades de cocina y organización",
+      supports:
+        "Le ayuda preparar sus ideas antes de hablar y recibir instrucciones claras",
+      currentGoal: "Aprender a presentarse mejor en un taller",
+      finalAudience: "Compañeros y facilitadores del taller",
+      finalUse: "Presentación oral breve y descripción profesional",
+      desiredTone: "Cercano, natural y seguro",
+      desiredLength: "Breve, fácil de leer en voz alta",
+      mustInclude: "Interés por la cocina y ganas de seguir aprendiendo",
+      mustAvoid: "No sonar como entrevista de trabajo formal",
+      internalContext:
+        "El objetivo es practicar seguridad personal y expresar capacidades reales",
+    },
+    routeData: {
+      message:
+        "Quiere comunicar que es una persona responsable, amable y con ganas de aprender",
+      presentationPlace: "Taller de habilidades personales",
+      strengths: "Amabilidad, responsabilidad, creatividad y constancia",
+      personalImage: "Cercana, positiva y capaz de aportar al grupo",
+      preferredName: "Daniela",
+      city: "Valencia",
+      currentSituation: "Participa en un proceso de orientación y formación",
+      workshopTopic: "Presentación personal y confianza",
+      workshopAudience: "Compañeros del taller y profesionales de apoyo",
+      workshopGoal:
+        "Practicar cómo hablar de sí misma de forma clara y tranquila",
+      workshopFormat: "Presentación oral de 1 minuto",
+      personalExamples:
+        "Suele ayudar a organizar materiales y participa con buena actitud",
+      experienceDetails:
+        "Apoyo en talleres de cocina, organización de espacios y actividades grupales",
+      interestDetails:
+        "Le interesa aprender recetas sencillas y compartir ideas creativas",
+      thingsToAvoid: "No mencionar información médica ni familiar",
+      tonePreference: "Natural, cercano y respetuoso",
+    },
+  },
+  emprendimiento: {
+    baseData: {
+      name: "Andrés Romero",
+      age: "32",
+      formDate: "15/07/2026",
+      supportProfessional: "Mentora de emprendimiento de CADIR",
+      skills:
+        "Creativo, paciente, comunicativo, organizado y con buena atención al detalle",
+      interests:
+        "Bienestar, actividad física, redes sociales y trato directo con clientes",
+      experience:
+        "Ha realizado talleres de yoga y ha guiado sesiones informales con personas conocidas",
+      supports:
+        "Le ayuda planificar horarios, organizar reservas y preparar publicaciones",
+      currentGoal: "Organizar una idea de emprendimiento para presentarla",
+      finalAudience: "Posibles clientes y personas interesadas en bienestar",
+      finalUse: "Presentación de emprendimiento",
+      desiredTone: "Profesional, cercano y tranquilo",
+      desiredLength: "Textos breves para diapositivas",
+      mustInclude: "Precio orientativo de 10 euros por sesión",
+      mustAvoid: "No mencionar CADIR dentro del texto comercial",
+      internalContext:
+        "La idea está en fase inicial y necesita organizarse antes de promocionarse",
+    },
+    routeData: {
+      productService: "Clases de yoga personalizadas",
+      targetAudience:
+        "Personas adultas que quieren moverse, relajarse y empezar yoga desde cero",
+      uniqueValue:
+        "Trato cercano, clases adaptadas al ritmo de cada persona y ambiente tranquilo",
+      promotionPlace: "Facebook, Instagram y recomendaciones de conocidos",
+      needSolved:
+        "Ayuda a reducir estrés, cuidar el cuerpo y crear una rutina de bienestar",
+      businessName: "Manos Amables Yoga",
+      location: "Valencia",
+      servicePlace: "A domicilio, parques tranquilos o espacios comunitarios",
+      targetProfile:
+        "Principiantes, personas con estrés o quienes buscan una actividad suave",
+      experienceOrCredentials:
+        "Práctica personal de yoga y participación en talleres de bienestar",
+      schedule: "Tardes y fines de semana, con reserva previa",
+      priceIdea: "10 € por sesión individual",
+      bookingMethod: "Mensaje por WhatsApp o Facebook",
+      contactPhone: "600 987 654",
+      contactEmail: "manosamables.demo@email.com",
+      socialMedia: "Facebook e Instagram",
+      communicationTone: "Tranquilo, cercano y profesional",
+      resources:
+        "Esterilla, espacio al aire libre, redes sociales y fotografías básicas",
+      nextStep: "Crear una publicación de presentación y probar con primeros clientes",
+      limitations:
+        "Organizar reservas, confirmar espacios disponibles y preparar mensajes de promoción",
+    },
+  },
+};
+
 export default function App() {
   const prefill = useMemo(
     () =>
@@ -175,6 +321,21 @@ export default function App() {
     setCopied(false);
   };
 
+  const handleLoadDemoData = () => {
+    const demoData = demoDataByRoute[selectedRoute];
+
+    setBaseData({
+      ...initialBaseData,
+      ...demoData.baseData,
+    });
+    setRouteData({
+      ...createRouteData(),
+      ...demoData.routeData,
+    });
+    setPrompt("");
+    setCopied(false);
+  };
+
   const handleGeneratePrompt = () => {
     const nextPrompt = buildPrompt({ baseData, selectedRoute, routeData });
     setPrompt(nextPrompt);
@@ -211,8 +372,9 @@ export default function App() {
                 >
                   C
                 </div>
-                <p className="inline-flex items-center rounded-full bg-cadir-lavender px-4 py-2 text-sm font-black text-cadir-purple">
-                  🌉 Puente Laboral CADIR
+                <p className="inline-flex items-center gap-2 rounded-full bg-cadir-lavender px-4 py-2 text-sm font-black text-cadir-purple">
+                  <BridgeIcon className="h-5 w-5 text-cadir-cyan" />
+                  Puente Laboral CADIR
                 </p>
               </div>
               <h1 className="mt-6 text-4xl font-black tracking-tight text-cadir-purple sm:text-5xl">
@@ -261,9 +423,18 @@ export default function App() {
                   Información para personalizar
                 </h2>
               </div>
-              <p className="rounded-full bg-cadir-lavender px-4 py-2 text-sm font-black text-cadir-purple">
-                {completedFields.completed} campos con datos
-              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleLoadDemoData}
+                  className="rounded-full border border-cadir-cyan bg-white px-4 py-2 text-sm font-black text-cadir-purple transition hover:bg-cadir-cyanSoft focus:outline-none focus:ring-4 focus:ring-cadir-cyan/25"
+                >
+                  Cargar datos de ejemplo
+                </button>
+                <p className="rounded-full bg-cadir-lavender px-4 py-2 text-sm font-black text-cadir-purple">
+                  {completedFields.completed} campos con datos
+                </p>
+              </div>
             </div>
 
             {prefill.hasPrefill && (
@@ -451,6 +622,10 @@ export default function App() {
             </section>
           </div>
         </div>
+
+        <footer className="mt-8 rounded-full bg-white/85 px-5 py-3 text-center text-sm font-bold text-cadir-purple shadow-soft backdrop-blur">
+          Desarrollado por Daniela Castellanos
+        </footer>
       </div>
     </main>
   );
