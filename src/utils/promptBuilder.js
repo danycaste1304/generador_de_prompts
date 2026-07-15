@@ -18,8 +18,13 @@ const getRouteFields = (route) => [
   ...(route.supportFields || []),
 ];
 
-export const buildPrompt = ({ baseData, selectedRoute, routeData }) => {
-  const route = routes[selectedRoute];
+export const buildPrompt = ({
+  baseData,
+  selectedRoute,
+  routeData,
+  routeOverride,
+}) => {
+  const route = routeOverride || routes[selectedRoute];
 
   if (!route) {
     return "";

@@ -1,6 +1,4 @@
-import { routeOptions } from "../data/routes.js";
-
-export default function RouteSelector({ selectedRoute, onSelect }) {
+export default function RouteSelector({ routeOptions, selectedRoute, onSelect }) {
   return (
     <fieldset className="space-y-4">
       <legend className="text-lg font-black text-cadir-ink">

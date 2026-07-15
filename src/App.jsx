@@ -5,6 +5,7 @@ import PromptOutput from "./components/PromptOutput.jsx";
 import SectionPanel from "./components/SectionPanel.jsx";
 import FlowSteps from "./components/FlowSteps.jsx";
 import BridgeIcon from "./components/BridgeIcon.jsx";
+import CustomTemplatePanel from "./components/CustomTemplatePanel.jsx";
 import { routes } from "./data/routes.js";
 import { buildPrompt, getAllRouteFields } from "./utils/promptBuilder.js";
 import { buildPrefillFromUrl } from "./utils/prefill.js";
@@ -118,13 +119,69 @@ const personalizationFields = [
   },
 ];
 
-const createRouteData = () =>
-  Object.values(routes).reduce((accumulator, route) => {
+const createRouteData = (routeList = Object.values(routes)) =>
+  routeList.reduce((accumulator, route) => {
     getAllRouteFields(route).forEach((field) => {
       accumulator[field.name] = "";
     });
     return accumulator;
   }, {});
+
+const customTemplatesStorageKey = "puenteLaboralCadirCustomTemplates";
+
+const loadCustomTemplates = () => {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const storedTemplates = window.localStorage.getItem(
+      customTemplatesStorageKey,
+    );
+    return storedTemplates ? JSON.parse(storedTemplates) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveCustomTemplates = (templates) => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(
+    customTemplatesStorageKey,
+    JSON.stringify(templates),
+  );
+};
+
+const normalizeTemplateFields = (template) =>
+  template.fieldsText
+    .split("\n")
+    .map((field) => field.trim())
+    .filter(Boolean)
+    .map((label, index) => ({
+      name: `custom_${template.id}_${index}`,
+      label,
+      placeholder: `Completa: ${label}`,
+    }));
+
+const createCustomRoute = (template) => ({
+  id: template.id,
+  emoji: "🧩",
+  title: template.title,
+  description:
+    template.description ||
+    "Plantilla personalizada creada para un material específico.",
+  additionalFields: normalizeTemplateFields(template),
+  supportFieldsTitle: "Datos complementarios para esta plantilla",
+  supportFields: [],
+  requestedMaterials: [
+    template.materialName ||
+      `Contenido listo para completar la plantilla ${template.title}`,
+  ],
+  outputTemplate: `Devuelve el resultado exactamente con esta estructura, sin saludo inicial, sin explicación adicional, sin formato de tabla y sin secciones extra:
+
+${template.outputTemplate}`,
+  contextInstruction: `Esta es una plantilla personalizada creada por CADIR. Genera contenido adaptado al caso de la persona y al uso indicado. Respeta la estructura de salida entregada. Usa textos breves si parece una plantilla visual. No inventes datos; si falta información para un campo, escribe "por completar". ${
+    template.extraInstructions || ""
+  }`,
+});
 
 const demoDataByRoute = {
   empleo: {
@@ -279,6 +336,23 @@ export default function App() {
       ),
     [],
   );
+  const [customTemplates, setCustomTemplates] = useState(loadCustomTemplates);
+  const customRoutes = useMemo(
+    () => customTemplates.map((template) => createCustomRoute(template)),
+    [customTemplates],
+  );
+  const routeOptions = useMemo(
+    () => [...Object.values(routes), ...customRoutes],
+    [customRoutes],
+  );
+  const routeMap = useMemo(
+    () =>
+      routeOptions.reduce((accumulator, route) => {
+        accumulator[route.id] = route;
+        return accumulator;
+      }, {}),
+    [routeOptions],
+  );
   const [baseData, setBaseData] = useState(() => ({
     ...initialBaseData,
     ...prefill.baseData,
@@ -287,13 +361,14 @@ export default function App() {
     prefill.selectedRoute || "empleo",
   );
   const [routeData, setRouteData] = useState(() => ({
-    ...createRouteData(),
+    ...createRouteData(routeOptions),
     ...prefill.routeData,
   }));
   const [prompt, setPrompt] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const activeRoute = routes[selectedRoute];
+  const activeRoute = routeMap[selectedRoute] || routes.empleo;
+  const hasDemoData = Boolean(demoDataByRoute[selectedRoute]);
 
   const completedFields = useMemo(() => {
     const baseCompleted = Object.values(baseData).filter(
@@ -323,21 +398,47 @@ export default function App() {
 
   const handleLoadDemoData = () => {
     const demoData = demoDataByRoute[selectedRoute];
+    if (!demoData) return;
 
     setBaseData({
       ...initialBaseData,
       ...demoData.baseData,
     });
     setRouteData({
-      ...createRouteData(),
+      ...createRouteData(routeOptions),
       ...demoData.routeData,
     });
     setPrompt("");
     setCopied(false);
   };
 
+  const handleCreateTemplate = (templateData) => {
+    const template = {
+      ...templateData,
+      id: `personalizada_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    const nextTemplates = [...customTemplates, template];
+    const customRoute = createCustomRoute(template);
+
+    setCustomTemplates(nextTemplates);
+    saveCustomTemplates(nextTemplates);
+    setRouteData((current) => ({
+      ...createRouteData([...routeOptions, customRoute]),
+      ...current,
+    }));
+    setSelectedRoute(customRoute.id);
+    setPrompt("");
+    setCopied(false);
+  };
+
   const handleGeneratePrompt = () => {
-    const nextPrompt = buildPrompt({ baseData, selectedRoute, routeData });
+    const nextPrompt = buildPrompt({
+      baseData,
+      selectedRoute,
+      routeData,
+      routeOverride: activeRoute,
+    });
     setPrompt(nextPrompt);
     setCopied(false);
   };
@@ -427,7 +528,8 @@ export default function App() {
                 <button
                   type="button"
                   onClick={handleLoadDemoData}
-                  className="rounded-full border border-cadir-cyan bg-white px-4 py-2 text-sm font-black text-cadir-purple transition hover:bg-cadir-cyanSoft focus:outline-none focus:ring-4 focus:ring-cadir-cyan/25"
+                  disabled={!hasDemoData}
+                  className="rounded-full border border-cadir-cyan bg-white px-4 py-2 text-sm font-black text-cadir-purple transition hover:bg-cadir-cyanSoft focus:outline-none focus:ring-4 focus:ring-cadir-cyan/25 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 disabled:hover:bg-white"
                 >
                   Cargar datos de ejemplo
                 </button>
@@ -507,6 +609,7 @@ export default function App() {
 
               <div className="rounded-[1.75rem] border border-cadir-purple/10 bg-white p-5 shadow-sm">
                 <RouteSelector
+                  routeOptions={routeOptions}
                   selectedRoute={selectedRoute}
                   onSelect={(routeId) => {
                     setSelectedRoute(routeId);
@@ -514,6 +617,8 @@ export default function App() {
                   }}
                 />
               </div>
+
+              <CustomTemplatePanel onCreateTemplate={handleCreateTemplate} />
 
               <SectionPanel
                 number="4"
