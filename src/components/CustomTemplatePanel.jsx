@@ -1,9 +1,5 @@
 import { useState } from "react";
-import * as pdfjsLib from "pdfjs-dist/build/pdf.mjs";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import TextField from "./TextField.jsx";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const initialTemplateForm = {
   title: "",
@@ -72,6 +68,12 @@ export default function CustomTemplatePanel({ onCreateTemplate }) {
     setFeedback("Leyendo PDF de Canva...");
 
     try {
+      const [pdfjsLib, pdfWorker] = await Promise.all([
+        import("pdfjs-dist/build/pdf.mjs"),
+        import("pdfjs-dist/build/pdf.worker.min.mjs?url"),
+      ]);
+      pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker.default;
+
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({
         data: new Uint8Array(arrayBuffer),
@@ -181,6 +183,34 @@ export default function CustomTemplatePanel({ onCreateTemplate }) {
           {feedback}
         </p>
       )}
+
+      <div className="mt-5 rounded-[1.5rem] bg-white p-4">
+        <p className="font-black text-cadir-purple">
+          Importar desde Canva
+        </p>
+        <p className="mt-2 text-sm leading-6 text-slate-700">
+          En Canva, escribe los campos con doble llave, por ejemplo{" "}
+          <span className="font-black text-cadir-purple">{"{{NOMBRE}}"}</span>,{" "}
+          <span className="font-black text-cadir-purple">
+            {"{{PERFIL_LABORAL}}"}
+          </span>{" "}
+          o{" "}
+          <span className="font-black text-cadir-purple">
+            {"{{PRESENTACION_FINAL}}"}
+          </span>
+          . Luego exporta como PDF y súbelo aquí.
+        </p>
+        <label className="mt-4 inline-flex cursor-pointer items-center rounded-full border border-cadir-cyan bg-cadir-cyanSoft px-5 py-3 text-sm font-black text-cadir-purple transition hover:bg-cadir-cyan/30 focus-within:ring-4 focus-within:ring-cadir-cyan/25">
+          {isImporting ? "Leyendo PDF..." : "Subir PDF de Canva"}
+          <input
+            type="file"
+            accept="application/pdf,.pdf"
+            onChange={handlePdfImport}
+            className="sr-only"
+            disabled={isImporting}
+          />
+        </label>
+      </div>
 
       {isOpen && (
         <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
