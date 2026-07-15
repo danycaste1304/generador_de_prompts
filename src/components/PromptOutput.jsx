@@ -1,3 +1,18 @@
+const aiTools = [
+  {
+    name: "ChatGPT",
+    url: "https://chat.openai.com/",
+  },
+  {
+    name: "Gemini",
+    url: "https://gemini.google.com/",
+  },
+  {
+    name: "Claude",
+    url: "https://claude.ai/",
+  },
+];
+
 export default function PromptOutput({ prompt, copied, onCopy }) {
   return (
     <section className="overflow-hidden rounded-[2rem] bg-cadir-purple text-white shadow-soft">
@@ -59,6 +74,31 @@ export default function PromptOutput({ prompt, copied, onCopy }) {
         className="mt-5 w-full resize-y rounded-3xl border border-white/10 bg-white/95 p-4 font-mono text-sm leading-6 text-cadir-ink outline-none focus:ring-4 focus:ring-white/30"
         placeholder="Completa la información y pulsa “Generar prompt”."
       />
+
+      {prompt && (
+        <div className="mt-5 rounded-3xl border border-white/15 bg-white/10 p-4">
+          <p className="text-sm font-bold text-cadir-cyan">
+            Después de copiarlo, abre una herramienta de IA:
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {aiTools.map((tool) => (
+              <a
+                key={tool.name}
+                href={tool.url}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full bg-white px-4 py-3 text-center text-sm font-black text-cadir-purple transition hover:bg-cadir-cyan hover:text-cadir-ink focus:outline-none focus:ring-4 focus:ring-white/30"
+              >
+                Abrir {tool.name}
+              </a>
+            ))}
+          </div>
+          <p className="mt-3 text-xs leading-5 text-white/75">
+            Por privacidad, el prompt no se envía automáticamente. Cópialo y
+            pégalo manualmente en la herramienta elegida.
+          </p>
+        </div>
+      )}
       </div>
     </section>
   );
